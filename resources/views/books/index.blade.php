@@ -1,40 +1,48 @@
-<head>
-  <!-- ... kode lainnya ... -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@extends('layouts.master')
+@section('title', 'Kelola Buku')
 
-<h3 class="mt-4">DAFTAR BUKU</h3> 
-<h4 class="mt-4">Silahkan Menambah Daftar Buku</h4> 
+@section('content')
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <h1 class="subheader">Kelola Buku</h1>
 
-<a href="{{ route('books.create') }}" class="btn btn-success mt-4">Tambah</a>
+                <a href="{{ route('books.create') }}" class="btn btn-primary btn-rounded btn-sm btn-30"><i
+                        class="fa fa-plus"></i> Tambah</a>
+            </div>
 
-
-@if (session()->has('pesan'))
-    <div class="alert alert-success">
-        {{ session()->get('pesan') }}
-    </div>
-@endif
-
-@foreach ($books as $book)
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title">Judul: {{ $book->title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Penulis: {{ $book->author }}</h6>
-            <p class="card-text">Deskripsi: {{ $book->description }}</p>
-            <a href="{{ route('books.show', $book->id) }}" class="btn btn-primary">Lihat</a>
-            <a href="{{ route('books.edit', $book->id) }}" class="btn btn-secondary">Edit</a>
-
-            <form action="{{ route('books.destroy', $book->id) }}" method="post" class="d-inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Hapus</button>
-            </form>
+            <div class="card mt-3">
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Judul</th>
+                                <th scope="col">Penulis</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($books as $book)
+                                <tr>
+                                    <th scope="row">{{ $loop->iteration }}</th>
+                                    <td>{{ $book->title }}</td>
+                                    <td>{{ $book->author->name }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('books.show', $book) }}"
+                                            class="btn btn-sm btn-success btn-rounded">Lihat</a>
+                                        <a href="{{ route('books.edit', $book) }}"
+                                            class="btn btn-sm btn-warning btn-rounded">Edit</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    {{ $books->links() }}
+                </div>
+            </div>
         </div>
     </div>
-@endforeach
-
-
-
-
-
-
+@endsection
